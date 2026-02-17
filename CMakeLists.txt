@@ -4,6 +4,17 @@ project(order_matching_engine
     VERSION 0.1.0
     LANGUAGES CXX
 )
+include(FetchContent)
+
+FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
+)
+
+# Prevent GoogleTest from overriding our compiler/linker options
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(googletest)
 
 # ---- C++ standard ----
 set(CMAKE_CXX_STANDARD 20)
@@ -33,8 +44,10 @@ enable_testing()
 add_executable(ome_tests
     tests/placeholder_test.cpp
 )
-target_link_libraries(ome_tests PRIVATE ome)
-add_test(NAME ome_tests COMMAND ome_tests)
+target_link_libraries(ome_tests PRIVATE ome gtest_main)
+
+include(GoogleTest)
+gtest_discover_tests(ome_tests)
 
 # ---- Benchmarks (placeholder) ----
 add_executable(ome_bench
