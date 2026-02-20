@@ -31,5 +31,7 @@ In active development. Design-first approach.
 ```bash
 cmake -B build
 cmake --build build
+```
+
 ## Design Philosophy
 Correctness → determinism → performance.
