@@ -4,14 +4,15 @@
 namespace ome {
 
 void OrderBook::addOrder(const Order& order) {
-    if (order.side != Side::BUY) {
-        throw std::invalid_argument("OrderBook (bid side) accepts BUY orders only");
+    if (order.side == Side::BUY) {
+        auto [it, inserted] = bids_.try_emplace(order.price, order.price);
+        it->second.addOrder(order);
+    } else {
+        auto [it, inserted] = asks_.try_emplace(order.price, order.price);
+        it->second.addOrder(order);
     }
 
-    auto [it, inserted] = bids_.try_emplace(order.price, order.price);
-    it->second.addOrder(order);
-
-    order_index_[order.order_id] = order.price;
+    order_index_[order.order_id] = {order.side, order.price};
 }
 
 bool OrderBook::cancelOrder(OrderId order_id) {
@@ -20,19 +21,26 @@ bool OrderBook::cancelOrder(OrderId order_id) {
         return false;
     }
 
-    Price price = idx_it->second;
-    auto level_it = bids_.find(price);
-    if (level_it == bids_.end()) {
-        return false;
-    }
+    const auto& [side, price] = idx_it->second;
 
-    bool removed = level_it->second.removeOrder(order_id);
-    if (!removed) {
-        return false;
-    }
+    if (side == Side::BUY) {
+        auto level_it = bids_.find(price);
+        if (level_it == bids_.end()) return false;
 
-    if (level_it->second.isEmpty()) {
-        bids_.erase(level_it);
+        if (!level_it->second.removeOrder(order_id)) return false;
+
+        if (level_it->second.isEmpty()) {
+            bids_.erase(level_it);
+        }
+    } else {
+        auto level_it = asks_.find(price);
+        if (level_it == asks_.end()) return false;
+
+        if (!level_it->second.removeOrder(order_id)) return false;
+
+        if (level_it->second.isEmpty()) {
+            asks_.erase(level_it);
+        }
     }
 
     order_index_.erase(idx_it);
@@ -44,6 +52,20 @@ const PriceLevel* OrderBook::getBestBid() const {
         return nullptr;
     }
     return &bids_.begin()->second;
+}
+
+const PriceLevel* OrderBook::getBestAsk() const {
+    if (asks_.empty()) {
+        return nullptr;
+    }
+    return &asks_.begin()->second;
+}
+
+std::optional<Price> OrderBook::getBidAskSpread() const {
+    if (bids_.empty() || asks_.empty()) {
+        return std::nullopt;
+    }
+    return getBestAsk()->getPrice() - getBestBid()->getPrice();
 }
 
 std::size_t OrderBook::getOrderCount() const {

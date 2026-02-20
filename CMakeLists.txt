@@ -52,6 +52,7 @@ add_executable(ome_tests
     tests/order_id_generator_test.cpp
     tests/price_level_test.cpp
     tests/order_book_bid_test.cpp
+    tests/order_book_two_sided_test.cpp
 )
 target_link_libraries(ome_tests PRIVATE ome gtest_main)
 
