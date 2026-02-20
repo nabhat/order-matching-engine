@@ -24,6 +24,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # ---- Library target ----
 add_library(ome
+    src/Order.cpp
     src/placeholder.cpp
 )
 
@@ -44,6 +45,7 @@ target_compile_options(ome
 enable_testing()
 add_executable(ome_tests
     tests/placeholder_test.cpp
+    tests/order_test.cpp
 )
 target_link_libraries(ome_tests PRIVATE ome gtest_main)
 
