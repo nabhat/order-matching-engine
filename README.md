@@ -1,6 +1,7 @@
 # Order Matching Engine (C++)
 
 ![CI](https://github.com/nabhat/order-matching-engine/actions/workflows/ci.yml/badge.svg)
+![CODEQL](https://github.com/nabhat/order-matching-engine/actions/workflows/github-code-scanning/codeql/badge.svg)
 
 ## Overview
 A single-instrument limit order book and matching engine implemented in modern C++.
