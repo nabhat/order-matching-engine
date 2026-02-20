@@ -26,6 +26,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_library(ome
     src/Order.cpp
     src/OrderIDGenerator.cpp
+    src/PriceLevel.cpp
     src/placeholder.cpp
 )
 
@@ -48,6 +49,7 @@ add_executable(ome_tests
     tests/placeholder_test.cpp
     tests/order_test.cpp
     tests/order_id_generator_test.cpp
+    tests/price_level_test.cpp
 )
 target_link_libraries(ome_tests PRIVATE ome gtest_main)
 
