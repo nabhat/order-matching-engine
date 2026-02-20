@@ -29,6 +29,7 @@ add_library(ome
     src/PriceLevel.cpp
     src/placeholder.cpp
     src/OrderBook.cpp
+    src/Trade.cpp
 )
 
 target_include_directories(ome
@@ -53,6 +54,7 @@ add_executable(ome_tests
     tests/price_level_test.cpp
     tests/order_book_bid_test.cpp
     tests/order_book_two_sided_test.cpp
+    tests/trade_test.cpp
 )
 target_link_libraries(ome_tests PRIVATE ome gtest_main)
 
