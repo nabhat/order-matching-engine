@@ -34,15 +34,16 @@ add_library(ome
 
 target_include_directories(ome
     PUBLIC
-        ${PROJECT_SOURCE_DIR}/include
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
 )
 
 # ---- Warnings ----
 target_compile_options(ome
     PRIVATE
-        -Wall
-        -Wextra
-        -Werror
+        # MSVC warnings
+        $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+        # GCC/Clang warnings
+        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Werror>
 )
 
 # ---- Tests (placeholder for now) ----
