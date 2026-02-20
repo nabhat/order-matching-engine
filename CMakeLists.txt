@@ -28,6 +28,7 @@ add_library(ome
     src/OrderIDGenerator.cpp
     src/PriceLevel.cpp
     src/placeholder.cpp
+    src/OrderBook.cpp
 )
 
 target_include_directories(ome
@@ -50,6 +51,7 @@ add_executable(ome_tests
     tests/order_test.cpp
     tests/order_id_generator_test.cpp
     tests/price_level_test.cpp
+    tests/order_book_bid_test.cpp
 )
 target_link_libraries(ome_tests PRIVATE ome gtest_main)
 
